@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velocity Eats | Online Food Delivery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    colors: {
+                        brand: { 50: '#fff7ed', 100: '#ffedd5', 500: '#f97316', 600: '#ea580c', 900: '#7c2d12', }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; cursor: grab; }
+        .no-scrollbar:active { cursor: grabbing; }
+
+        /* Dynamic Reveal Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered reveals */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Rotating text fade */
+        .fade-text {
+            animation: textFade 4s infinite;
+        }
+        @keyframes textFade {
+            0%, 100% { opacity: 0; transform: translateY(10px); }
+            10%, 90% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 antialiased selection:bg-brand-500 selection:text-white overflow-x-hidden">
+
+    <!-- Dynamic Top Banner -->
+    <div class="bg-gray-900 text-white text-sm py-2 overflow-hidden flex whitespace-nowrap relative z-50">
+        <div class="animate-marquee flex gap-12 items-center min-w-full">
+            <span>🎉 <span class="font-bold text-brand-500">20% OFF</span> your first order with code WELCOME20</span>
+            <span>🚀 Free Delivery on orders over $30!</span>
+            <span>🍔 New Burger joints added in your area</span>
+            <span>⏱️ Lightning fast delivery under 30 minutes</span>
+            <!-- Duplicated for seamless loop -->
+            <span>🎉 <span class="font-bold text-brand-500">20% OFF</span> your first order with code WELCOME20</span>
+            <span>🚀 Free Delivery on orders over $30!</span>
+            <span>🍔 New Burger joints added in your area</span>
+            <span>⏱️ Lightning fast delivery under 30 minutes</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 w-full z-40 transition-all duration-300 bg-white/80 backdrop-blur-lg shadow-sm border-b border-gray-100" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer group">
+                    <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-brand-500/30 group-hover:rotate-12 transition-transform duration-300">
+                        <i class="fa-solid fa-burger"></i>
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight text-gray-900">Velocity <span class="text-brand-500">Eats</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-gray-900 font-medium hover:text-brand-500 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all after:duration-300">Home</a>
+                    <a href="#menu" class="text-gray-600 font-medium hover:text-brand-500 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all after:duration-300">Menu</a>
+                    <a href="#how-it-works" class="text-gray-600 font-medium hover:text-brand-500 transition-colors relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 hover:after:w-full after:transition-all after:duration-300">How it Works</a>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-4">
+                    <button class="hidden sm:flex text-gray-500 hover:text-brand-500 transition-transform hover:scale-110">
+                        <i class="fa-solid fa-magnifying-glass text-xl"></i>
+                    </button>
+                    <button class="relative bg-gray-100 hover:bg-gray-200 p-3 rounded-full transition-transform hover:scale-110 flex items-center justify-center group">
+                        <i class="fa-solid fa-cart-shopping text-gray-700 group-hover:text-brand-500 transition-colors"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white transition-transform">0</span>
+                    </button>
+                    <button class="hidden md:block bg-brand-500 hover:bg-brand-600 text-white px-6 py-2.5 rounded-full font-medium transition-all shadow-lg shadow-brand-500/30 hover:-translate-y-1 hover:shadow-brand-500/50 active:translate-y-0">
+                        Sign In
+                    </button>
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden text-gray-600 hover:text-brand-500 focus:outline-none transition-transform active:scale-95" id="mobile-menu-btn">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-white border-t transition-all duration-300 origin-top" id="mobile-menu">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-900 bg-gray-50">Home</a>
+                <a href="#menu" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">Menu</a>
+                <a href="#how-it-works" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50">How it Works</a>
+                <button class="w-full mt-4 bg-brand-500 text-white px-6 py-3 rounded-xl font-medium active:scale-95 transition-transform">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-20 pb-20 lg:pt-32 lg:pb-32 overflow-hidden relative">
+        <!-- Animated Background Blobs -->
+        <div class="absolute top-0 left-10 w-72 h-72 bg-brand-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+        <div class="absolute top-0 right-10 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-40 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-4000"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
+                
+                <!-- Text Content -->
+                <div class="flex-1 text-center lg:text-left reveal">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm text-brand-600 font-medium text-sm mb-6 border border-brand-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+                        Fastest Delivery in Town
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-extrabold text-gray-900 leading-tight mb-6">
+                        Claim Best Food <br>
+                        From <span class="text-brand-500 relative inline-block min-w-[280px]">
+                            <span id="dynamic-text" class="absolute left-0 top-0 w-full lg:text-left text-center">Best Chefs</span>
+                            <span class="invisible">Best Chefs</span> <!-- Spacer to keep width -->
+                            <svg class="absolute w-full h-3 -bottom-1 left-0 text-brand-500/30" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 15 100 5" stroke="currentColor" stroke-width="4" fill="none"/></svg>
+                        </span>
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+                        Satisfy your cravings with our curated menu of mouth-watering dishes. Delivered hot and fresh to your doorstep in minutes.
+                    </p>
+                    
+                    <!-- Search/Address Bar -->
+                    <div class="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto lg:mx-0 bg-white p-2 rounded-2xl sm:rounded-full shadow-xl shadow-gray-200/50 border border-gray-100 hover:shadow-2xl transition-shadow duration-300 focus-within:ring-2 focus-within:ring-brand-500/50">
+                        <div class="flex-1 flex items-center px-4 py-2">
+                            <i class="fa-solid fa-location-dot text-brand-500 mr-3 animate-bounce" style="animation-duration: 2s;"></i>
+                            <input type="text" placeholder="Enter your delivery address..." class="w-full bg-transparent border-none focus:outline-none text-gray-700 placeholder-gray-400">
+                        </div>
+                        <button class="bg-brand-500 hover:bg-brand-600 text-white px-8 py-4 rounded-xl sm:rounded-full font-bold transition-all whitespace-nowrap hover:shadow-lg hover:shadow-brand-500/40 active:scale-95">
+                            Find Food
+                        </button>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="flex items-center justify-center lg:justify-start gap-8 mt-10 reveal delay-200">
+                        <div class="group cursor-pointer">
+                            <p class="text-3xl font-bold text-gray-900 group-hover:text-brand-500 transition-colors">4.9<span class="text-brand-500 text-xl group-hover:animate-spin inline-block">★</span></p>
+                            <p class="text-sm text-gray-500 font-medium">Customer Rating</p>
+                        </div>
+                        <div class="w-px h-10 bg-gray-200"></div>
+                        <div class="group cursor-pointer">
+                            <p class="text-3xl font-bold text-gray-900 group-hover:text-brand-500 transition-colors">50<span class="text-brand-500">+</span></p>
+                            <p class="text-sm text-gray-500 font-medium">Partner Restaurants</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image with Floating Elements -->
+                <div class="flex-1 relative w-full max-w-lg lg:max-w-none mx-auto reveal delay-300">
+                    <!-- Floating Decorations -->
+                    <div class="absolute -top-10 -left-10 text-5xl animate-float drop-shadow-xl z-20">🍕</div>
+                    <div class="absolute top-20 -right-5 text-4xl animate-float-delayed drop-shadow-xl z-20">🍟</div>
+                    <div class="absolute bottom-10 -left-5 text-5xl animate-float-delayed drop-shadow-xl z-20">🥤</div>
+
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=1024&q=80" 
+                         alt="Delicious Food Assortment" 
+                         class="relative z-10 w-full h-auto rounded-[2rem] shadow-2xl object-cover border-8 border-white transform lg:-rotate-2 transition-all hover:rotate-0 hover:scale-105 duration-500"
+                         onerror="this.src='https://placehold.co/800x600/f97316/ffffff?text=Delicious+Food'">
+                    
+                    <!-- Floating Badge -->
+                    <div class="absolute -bottom-6 right-10 z-20 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hover:scale-110 transition-transform cursor-pointer">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-xl">
+                            <i class="fa-solid fa-motorcycle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Delivery within</p>
+                            <p class="text-lg font-bold text-gray-900">30 Minutes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-12 bg-white relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">Explore Menu</h2>
+                    <p class="text-gray-500 mt-2">Drag to scroll through categories</p>
+                </div>
+                <div class="hidden sm:flex gap-2">
+                    <button id="scroll-left" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white hover:border-brand-500 transition-all active:scale-95 shadow-sm">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button id="scroll-right" class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white hover:border-brand-500 transition-all active:scale-95 shadow-sm">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Drag to scroll container -->
+            <div id="category-container" class="flex overflow-x-auto gap-4 pb-6 pt-2 no-scrollbar snap-x select-none">
+                <!-- Category Items -->
+                <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-brand-50 rounded-2xl border border-brand-100 cursor-pointer snap-start hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform hover:scale-110"><i class="fa-solid fa-pizza-slice text-brand-500"></i></div>
+                    <span class="font-semibold text-gray-900">Pizza</span>
+                </div>
+                <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer snap-start hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform group-hover:scale-110 group-hover:bg-amber-50"><i class="fa-solid fa-burger text-amber-500"></i></div>
+                    <span class="font-semibold text-gray-700 group-hover:text-brand-600 transition-colors">Burger</span>
+                </div>
+                <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer snap-start hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform group-hover:scale-110 group-hover:bg-red-50">🍣</div>
+                    <span class="font-semibold text-gray-700 group-hover:text-brand-600 transition-colors">Sushi</span>
+                </div>
+                <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer snap-start hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform group-hover:scale-110 group-hover:bg-green-50"><i class="fa-solid fa-bowl-food text-green-500"></i></div>
+                    <span class="font-semibold text-gray-700 group-hover:text-brand-600 transition-colors">Healthy</span>
+                </div>
+                <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer snap-start hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform group-hover:scale-110 group-hover:bg-purple-50">🍰</div>
+                    <span class="font-semibold text-gray-700 group-hover:text-brand-600 transition-colors">Dessert</span>
+                </div>
+                <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer snap-start hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform group-hover:scale-110 group-hover:bg-orange-50"><i class="fa-solid fa-mug-hot text-amber-800"></i></div>
+                    <span class="font-semibold text-gray-700 group-hover:text-brand-600 transition-colors">Coffee</span>
+                </div>
+                 <div class="min-w-[120px] flex flex-col items-center gap-3 p-4 bg-white rounded-2xl border border-gray-100 cursor-pointer snap-start hover:-translate-y-2 hover:border-brand-300 hover:shadow-lg transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center text-3xl shadow-sm transform transition-transform group-hover:scale-110 group-hover:bg-pink-50"><i class="fa-solid fa-ice-cream text-pink-500"></i></div>
+                    <span class="font-semibold text-gray-700 group-hover:text-brand-600 transition-colors">Ice Cream</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Menu Section -->
+    <section id="menu" class="py-20 bg-gray-50/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Popular Dishes</h2>
+                <p class="text-gray-500 text-lg">Specially crafted delicacies that our customers love the most. Hand-picked ingredients and authentic recipes.</p>
+            </div>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Food Item 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group border border-gray-100 reveal delay-100">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Classic Burger" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/ea580c/ffffff?text=Burger'">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-star text-yellow-400"></i> 4.8
+                        </div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-white shadow-sm transition-all hover:scale-110 active:scale-95">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-brand-600 transition-colors">Double Smash Burger</h3>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Two juicy beef patties, melted cheddar, house sauce, caramelized onions on a brioche bun.</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <span class="text-2xl font-bold text-brand-600">$12.99</span>
+                            <button onclick="addToCart('Double Smash Burger')" class="w-12 h-12 bg-gray-900 hover:bg-brand-500 text-white rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-brand-500/50 hover:rotate-90 active:scale-90">
+                                <i class="fa-solid fa-plus text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Item 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group border border-gray-100 reveal delay-200">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Pepperoni Pizza" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/ea580c/ffffff?text=Pizza'">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-star text-yellow-400"></i> 4.9
+                        </div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-white shadow-sm transition-all hover:scale-110 active:scale-95">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-brand-600 transition-colors">Spicy Pepperoni Pizza</h3>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Authentic Neapolitan crust topped with san marzano tomato sauce, fresh mozzarella, and spicy pepperoni.</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <span class="text-2xl font-bold text-brand-600">$16.50</span>
+                            <button onclick="addToCart('Spicy Pepperoni Pizza')" class="w-12 h-12 bg-gray-900 hover:bg-brand-500 text-white rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-brand-500/50 hover:rotate-90 active:scale-90">
+                                <i class="fa-solid fa-plus text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Item 3 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group border border-gray-100 reveal delay-300">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Healthy Bowl" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/ea580c/ffffff?text=Salad'">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-star text-yellow-400"></i> 4.7
+                        </div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-white shadow-sm transition-all hover:scale-110 active:scale-95">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-brand-600 transition-colors">Quinoa Avocado Bowl</h3>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Fresh mixed greens, tricolor quinoa, sliced avocado, roasted chickpeas with a lemon-tahini dressing.</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <span class="text-2xl font-bold text-brand-600">$14.00</span>
+                            <button onclick="addToCart('Quinoa Avocado Bowl')" class="w-12 h-12 bg-gray-900 hover:bg-brand-500 text-white rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-brand-500/50 hover:rotate-90 active:scale-90">
+                                <i class="fa-solid fa-plus text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Item 4 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group border border-gray-100 reveal delay-100">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1553621042-f6e147245754?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Sushi Roll" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://placehold.co/600x400/ea580c/ffffff?text=Sushi'">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-star text-yellow-400"></i> 4.9
+                        </div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-white shadow-sm transition-all hover:scale-110 active:scale-95">
+                            <i class="fa-solid fa-heart text-red-500"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-brand-600 transition-colors">Dragon Sushi Roll</h3>
+                        </div>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Shrimp tempura, cucumber, topped with sliced eel, avocado, and unagi sauce. 8 pieces.</p>
+                        <div class="flex justify-between items-center mt-auto">
+                            <span class="text-2xl font-bold text-brand-600">$18.50</span>
+                            <button onclick="addToCart('Dragon Sushi Roll')" class="w-12 h-12 bg-gray-900 hover:bg-brand-500 text-white rounded-full flex items-center justify-center transition-all shadow-md hover:shadow-brand-500/50 hover:rotate-90 active:scale-90">
+                                <i class="fa-solid fa-plus text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="text-center mt-12 reveal">
+                <button class="border-2 border-brand-500 text-brand-600 hover:bg-brand-500 hover:text-white px-8 py-3 rounded-full font-bold transition-all hover:shadow-lg hover:shadow-brand-500/30 active:scale-95 group">
+                    View Full Menu <i class="fa-solid fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="how-it-works" class="py-20 bg-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+                <p class="text-gray-500 text-lg">Get your favorite food in 3 simple steps</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-12 left-[15%] right-[15%] h-0.5 bg-gray-200 -z-10 border-t-2 border-dashed border-gray-300 reveal"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative bg-white reveal delay-100 group">
+                    <div class="w-24 h-24 mx-auto bg-brand-50 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-brand-100 group-hover:bg-brand-500 group-hover:text-white group-hover:-translate-y-2 transition-all duration-300 cursor-default">
+                        <i class="fa-solid fa-mobile-screen-button text-4xl text-brand-500 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">1. Choose Order</h3>
+                    <p class="text-gray-500">Browse our extensive menu and add your favorite items to the cart.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative bg-white reveal delay-200 group">
+                    <div class="w-24 h-24 mx-auto bg-brand-50 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-brand-100 group-hover:bg-brand-500 group-hover:text-white group-hover:-translate-y-2 transition-all duration-300 cursor-default">
+                        <i class="fa-solid fa-fire-burner text-4xl text-brand-500 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">2. We Cook</h3>
+                    <p class="text-gray-500">Our expert chefs prepare your meal with fresh ingredients and love.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative bg-white reveal delay-300 group">
+                    <div class="w-24 h-24 mx-auto bg-brand-50 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-brand-100 group-hover:bg-brand-500 group-hover:text-white group-hover:-translate-y-2 transition-all duration-300 cursor-default">
+                        <i class="fa-solid fa-bag-shopping text-4xl text-brand-500 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">3. Fast Delivery</h3>
+                    <p class="text-gray-500">Our riders deliver your food hot and fresh to your doorstep.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action App Download -->
+    <section class="bg-gray-900 py-16 relative overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500 rounded-full blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-yellow-500 rounded-full blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 reveal">
+            <div class="text-center md:text-left max-w-xl">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Get the Velocity Eats App</h2>
+                <p class="text-gray-400 mb-8 text-lg">Order faster, track your delivery in real-time, and get exclusive discounts only available on our mobile app.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <button class="flex items-center justify-center gap-3 bg-white text-gray-900 px-6 py-3 rounded-xl hover:bg-gray-100 hover:scale-105 active:scale-95 transition-all font-semibold shadow-lg">
+                        <i class="fa-brands fa-apple text-2xl"></i>
+                        <div class="text-left leading-tight">
+                            <span class="text-xs font-normal block">Download on the</span>
+                            <span class="text-sm">App Store</span>
+                        </div>
+                    </button>
+                    <button class="flex items-center justify-center gap-3 bg-white text-gray-900 px-6 py-3 rounded-xl hover:bg-gray-100 hover:scale-105 active:scale-95 transition-all font-semibold shadow-lg">
+                        <i class="fa-brands fa-google-play text-2xl text-green-500"></i>
+                        <div class="text-left leading-tight">
+                            <span class="text-xs font-normal block">GET IT ON</span>
+                            <span class="text-sm">Google Play</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="hidden lg:block w-72 animate-float">
+                <!-- Phone Mockup SVG replacement -->
+                <div class="w-full h-80 bg-gray-800 border-4 border-gray-700 rounded-[2.5rem] shadow-2xl shadow-brand-500/20 relative overflow-hidden flex flex-col">
+                    <div class="h-6 w-32 bg-gray-700 mx-auto rounded-b-xl absolute left-1/2 -translate-x-1/2 top-0 z-20"></div>
+                    <div class="bg-brand-500 p-4 text-white font-bold pt-8 shadow-md relative z-10">Velocity Eats</div>
+                    <div class="p-4 bg-gray-100 flex-1 flex flex-col gap-3 relative z-0">
+                        <div class="h-24 bg-white rounded-xl shadow-sm w-full animate-pulse"></div>
+                        <div class="h-16 bg-white rounded-xl shadow-sm w-full"></div>
+                        <div class="h-16 bg-white rounded-xl shadow-sm w-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+                <!-- Brand Column -->
+                <div>
+                    <div class="flex items-center gap-2 mb-6 group cursor-pointer">
+                        <div class="w-8 h-8 bg-brand-500 rounded-lg flex items-center justify-center text-white text-sm shadow-md group-hover:rotate-12 transition-transform">
+                            <i class="fa-solid fa-burger"></i>
+                        </div>
+                        <span class="font-bold text-xl tracking-tight text-gray-900">Velocity <span class="text-brand-500">Eats</span></span>
+                    </div>
+                    <p class="text-gray-500 mb-6">Delivering happiness to your doorstep. Best food, finest restaurants, fast delivery.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-brand-500 hover:text-white hover:-translate-y-1 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links 1 -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-6">Company</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">About Us</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Careers</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Blog</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links 2 -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-6">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Help Center</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Safety Center</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-500 hover:text-brand-500 hover:translate-x-1 inline-block transition-transform">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-6">Newsletter</h4>
+                    <p class="text-gray-500 mb-4">Subscribe to get exclusive offers and updates.</p>
+                    <div class="flex shadow-sm rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-brand-500/50 transition-all">
+                        <input type="email" placeholder="Email address" class="w-full px-4 py-2 border-y border-l border-gray-300 focus:outline-none text-sm bg-gray-50">
+                        <button class="bg-brand-500 text-white px-4 py-2 hover:bg-brand-600 transition-colors active:bg-brand-700">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-400 text-sm">© 2026 Velocity Eats. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <i class="fa-brands fa-cc-visa text-3xl text-gray-300 hover:text-gray-500 transition-colors cursor-pointer"></i>
+                    <i class="fa-brands fa-cc-mastercard text-3xl text-gray-300 hover:text-gray-500 transition-colors cursor-pointer"></i>
+                    <i class="fa-brands fa-cc-paypal text-3xl text-gray-300 hover:text-gray-500 transition-colors cursor-pointer"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script>
+        // --- Navbar Glassmorphism Scroll Effect ---
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-md', 'bg-white/95');
+                navbar.classList.remove('shadow-sm', 'bg-white/80');
+            } else {
+                navbar.classList.remove('shadow-md', 'bg-white/95');
+                navbar.classList.add('shadow-sm', 'bg-white/80');
+            }
+        });
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // --- Rotating Text Logic (Hero) ---
+        const words = ["Best Chefs", "Local Spots", "Top Brands", "Hidden Gems"];
+        let wordIndex = 0;
+        const dynamicText = document.getElementById('dynamic-text');
+        
+        setInterval(() => {
+            dynamicText.classList.add('opacity-0', '-translate-y-2');
+            setTimeout(() => {
+                wordIndex = (wordIndex + 1) % words.length;
+                dynamicText.textContent = words[wordIndex];
+                dynamicText.classList.remove('opacity-0', '-translate-y-2');
+                dynamicText.classList.add('translate-y-2');
+                
+                requestAnimationFrame(() => {
+                    dynamicText.classList.remove('translate-y-2');
+                    dynamicText.classList.add('transition-all', 'duration-500');
+                });
+            }, 300);
+        }, 3000);
+
+        // --- Intersection Observer (Scroll Reveal Animation) ---
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target); // Reveal only once
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% visible
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // --- Drag to Scroll for Categories ---
+        const slider = document.getElementById('category-container');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+        });
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+        });
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2; // Scroll-fast
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Buttons for categories
+        document.getElementById('scroll-left').addEventListener('click', () => {
+            slider.scrollBy({ left: -200, behavior: 'smooth' });
+        });
+        document.getElementById('scroll-right').addEventListener('click', () => {
+            slider.scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        // --- Cart Logic & Animated Toast ---
+        let cartCount = 0;
+        const cartCountBadge = document.getElementById('cart-count');
+        const toastContainer = document.getElementById('toast-container');
+
+        function addToCart(itemName) {
+            cartCount++;
+            cartCountBadge.textContent = cartCount;
+            
+            // Pop animation
+            cartCountBadge.classList.add('scale-150');
+            setTimeout(() => { cartCountBadge.classList.remove('scale-150'); }, 200);
+
+            // Create Toast
+            const toast = document.createElement('div');
+            toast.className = 'bg-gray-900 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-10 opacity-0 transition-all duration-300 ease-out border-l-4 border-brand-500';
+            toast.innerHTML = `
+                <div class="w-8 h-8 bg-brand-500 rounded-full flex items-center justify-center text-white flex-shrink-0 animate-bounce">
+                    <i class="fa-solid fa-cart-arrow-down"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-sm">Delicious choice!</p>
+                    <p class="text-xs text-gray-300"><span class="text-white font-medium">${itemName}</span> added to cart.</p>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+
+            // Animate In
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+
+            // Remove automatically
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
